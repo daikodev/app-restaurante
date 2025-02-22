@@ -1,4 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/ubicacion"
+        android:icon="@drawable/location"
+        android:title="Ubicación"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/nosotros"
+        android:icon="@drawable/nosotros"
+        android:title="Nosotros"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/cerrar"
+        android:icon="@drawable/cerrar"
+        android:title="Cerrar"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/verProductos"
+        android:icon="@drawable/ver"
+        android:title="Ver Productos" />
+    <item
+        android:id="@+id/verVentas"
+        android:icon="@drawable/ver"
+        android:title="Ver Ventas" />
+    <item
+        android:id="@+id/productos"
+        android:icon="@drawable/productos"
+        android:title="Productos" />
+    <item
+        android:id="@+id/ventas"
+        android:icon="@drawable/ventas"
+        android:title="Ventas" />
 </menu>

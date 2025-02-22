@@ -3,6 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Zegel/Projects/Android/appRestaurante/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.29078947368421054" />
+        <entry key="..\:/Zegel/Projects/Android/appRestaurante/app/src/main/res/drawable/ic_launcher_background.xml" value="0.29078947368421054" />
+        <entry key="..\:/Zegel/Projects/Android/appRestaurante/app/src/main/res/drawable/location.xml" value="0.14351851851851852" />
+        <entry key="..\:/Zegel/Projects/Android/appRestaurante/app/src/main/res/drawable/nosotros.xml" value="0.1" />
+        <entry key="..\:/Zegel/Projects/Android/appRestaurante/app/src/main/res/drawable/productos.xml" value="0.1" />
+        <entry key="..\:/Zegel/Projects/Android/appRestaurante/app/src/main/res/drawable/ventas.xml" value="0.1" />
+        <entry key="..\:/Zegel/Projects/Android/appRestaurante/app/src/main/res/drawable/ver.xml" value="0.1" />
         <entry key="..\:/Zegel/Projects/Android/appRestaurante/app/src/main/res/layout/activity_home.xml" value="0.11639492753623189" />
         <entry key="..\:/Zegel/Projects/Android/appRestaurante/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Zegel/Projects/Android/appRestaurante/app/src/main/res/menu/menu.xml" value="0.33" />
