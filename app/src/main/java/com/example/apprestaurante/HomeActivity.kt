@@ -34,6 +34,12 @@ class HomeActivity : AppCompatActivity() {
         finish()
     }
 
+    fun callRestaurant() {
+        val intent = Intent(this, RestaurantActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     fun close() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder
@@ -84,11 +90,7 @@ class HomeActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.locate -> callMap()
 
-            R.id.restaurant -> Toast.makeText(
-                this,
-                "Consultas, llámanos al 942097670",
-                Toast.LENGTH_SHORT
-            ).show()
+            R.id.restaurant -> callRestaurant()
 
             R.id.close -> close()
 
