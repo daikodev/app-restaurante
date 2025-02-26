@@ -48,8 +48,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID)
-        val restaurante = LatLng(-12.154838333356325, -76.98228178887616)
-        mMap.addMarker(MarkerOptions().position(restaurante).title("Restaurante Panduro"))
+        val restaurante = LatLng(-12.154311878398468, -76.98281133382216)
+        mMap.addMarker(MarkerOptions().position(restaurante).title("Rústica"))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurante, 20f))
         mMap.uiSettings.isZoomControlsEnabled = true
     }
