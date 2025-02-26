@@ -1,6 +1,8 @@
 package com.example.apprestaurante
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -26,15 +28,77 @@ class HomeActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    fun callMap() {
+        val intent = Intent(this, MapsActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    fun close() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("¿Desea salir de la aplicación?")
+            .setPositiveButton(android.R.string.yes) { dialog, which ->
+                Toast.makeText(
+                    applicationContext, android.R.string.yes,
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                finishAffinity()
+            }
+            .setNegativeButton(android.R.string.no) { dialog, which ->
+                Toast.makeText(
+                    applicationContext, android.R.string.no,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
+    fun callViewProducts() {
+        val intent = Intent(this, ViewProductsActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    fun callViewSales() {
+        val intent = Intent(this, ViewSalesActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    fun registerProducts() {
+        val intent = Intent(this, RegisterProductsActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    fun registerSales() {
+        val intent = Intent(this, RegisterSalesActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
-            R.id.ubicacion -> Toast.makeText(this, "Consultas, llámanos al 942097670", Toast.LENGTH_SHORT).show()
-            R.id.nosotros -> Toast.makeText(this, "Consultas, llámanos al 942097670", Toast.LENGTH_SHORT).show()
-            R.id.cerrar -> Toast.makeText(this, "Consultas, llámanos al 942097670", Toast.LENGTH_SHORT).show()
-            R.id.verProductos -> Toast.makeText(this, "Consultas, llámanos al 942097670", Toast.LENGTH_SHORT).show()
-            R.id.verVentas -> Toast.makeText(this, "Consultas, llámanos al 942097670", Toast.LENGTH_SHORT).show()
-            R.id.productos -> Toast.makeText(this, "Consultas, llámanos al 942097670", Toast.LENGTH_SHORT).show()
-            R.id.ventas -> Toast.makeText(this, "Consultas, llámanos al 942097670", Toast.LENGTH_SHORT).show()
+        when (item.itemId) {
+            R.id.locate -> callMap()
+
+            R.id.restaurant -> Toast.makeText(
+                this,
+                "Consultas, llámanos al 942097670",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            R.id.close -> close()
+
+            R.id.viewProducts -> callViewProducts()
+
+            R.id.viewSales -> callViewSales()
+
+            R.id.products -> registerProducts()
+
+            R.id.sales -> registerSales()
         }
         return super.onOptionsItemSelected(item)
     }

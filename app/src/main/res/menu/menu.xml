@@ -2,34 +2,34 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/ubicacion"
+        android:id="@+id/locate"
         android:icon="@drawable/location"
         android:title="Ubicación"
         app:showAsAction="always" />
     <item
-        android:id="@+id/nosotros"
+        android:id="@+id/restaurant"
         android:icon="@drawable/nosotros"
         android:title="Nosotros"
         app:showAsAction="always" />
     <item
-        android:id="@+id/cerrar"
+        android:id="@+id/close"
         android:icon="@drawable/cerrar"
         android:title="Cerrar"
         app:showAsAction="always" />
     <item
-        android:id="@+id/verProductos"
+        android:id="@+id/viewProducts"
         android:icon="@drawable/ver"
         android:title="Ver Productos" />
     <item
-        android:id="@+id/verVentas"
+        android:id="@+id/viewSales"
         android:icon="@drawable/ver"
         android:title="Ver Ventas" />
     <item
-        android:id="@+id/productos"
+        android:id="@+id/products"
         android:icon="@drawable/productos"
         android:title="Productos" />
     <item
-        android:id="@+id/ventas"
+        android:id="@+id/sales"
         android:icon="@drawable/ventas"
         android:title="Ventas" />
 </menu>

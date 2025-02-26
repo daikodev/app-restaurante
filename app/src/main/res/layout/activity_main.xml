@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.053" />
 
     <EditText
-        android:id="@+id/txtNombre"
+        android:id="@+id/txtName"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -35,12 +35,13 @@
         app:layout_constraintVertical_bias="0.264" />
 
     <EditText
-        android:id="@+id/txtContrasena"
+        android:id="@+id/txtPassword"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Ingresa tu contraseña"
         android:inputType="textPersonName"
+        android:password="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.488"
@@ -59,5 +60,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.464" />
+
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Salir"
+        app:backgroundTint="#E91E63"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.556" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

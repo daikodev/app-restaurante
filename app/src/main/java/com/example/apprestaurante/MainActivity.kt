@@ -1,5 +1,6 @@
 package com.example.apprestaurante
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,67 +14,103 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.StringReader
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var txtNombre: EditText
-    lateinit var txtContrasena: EditText
+    lateinit var txtName: EditText
+    lateinit var txtPassword: EditText
 
     lateinit var btnLogin: Button
+    lateinit var btnClose: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        txtNombre = findViewById(R.id.txtNombre)
-        txtContrasena = findViewById(R.id.txtContrasena)
+        txtName = findViewById(R.id.txtName)
+        txtPassword = findViewById(R.id.txtPassword)
 
         btnLogin = findViewById(R.id.btnLogin)
+        btnClose = findViewById(R.id.btnClose)
 
         btnLogin.setOnClickListener {
-            loginUsuario()
+            loginUser()
+        }
+
+        btnClose.setOnClickListener {
+            close()
         }
     }
 
-    private fun loginUsuario() {
-        val nombre = txtNombre.text.toString().trim()
-        val contrasena = txtContrasena.text.toString().trim()
+    private fun loginUser() {
+        val name = txtName.text.toString().trim()
+        val password = txtPassword.text.toString().trim()
+
+        if (name.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Por favor, ingrese usuario y contraseña", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         // Volley
         val stringRequest = object : StringRequest(Request.Method.POST, EndPoints.URL_LOGIN,
             Response.Listener<String> { response ->
                 try {
                     val jsonObject = JSONObject(response)
-                    val idUsuario = jsonObject.getInt("idUsuario")
-                    val nombreUsuario = jsonObject.getString("nombre")
 
-                    Toast.makeText(this, "Bienvenido, $nombreUsuario", Toast.LENGTH_SHORT).show()
+                    val username = jsonObject.getString("name")
+                    Toast.makeText(this, "Bienvenido, $username", Toast.LENGTH_SHORT).show()
 
                     // Llamar al HomeActivity
-                    val llamar = Intent(this, HomeActivity::class.java)
-                    startActivity(llamar)
+                    val intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
                     finish()
 
                 } catch (e: JSONException) {
                     e.printStackTrace()
+                    Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT).show()
                 }
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(volleyError: VolleyError) {
-                    Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG)
-                        .show()
+                    if (volleyError.networkResponse != null && volleyError.networkResponse.statusCode == 401) {
+                        Toast.makeText(applicationContext, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG)
+                            .show()
+                    }
                 }
             }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
                 val params = HashMap<String, String>()
-                params.put("nombre", nombre)
-                params.put("contrasena", contrasena)
+                params.put("name", name)
+                params.put("password", password)
                 return params
             }
         }
 
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
+    }
+
+    fun close() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("¿Desea salir de la aplicación?")
+            .setPositiveButton(android.R.string.yes) { dialog, which ->
+                Toast.makeText(
+                    applicationContext, android.R.string.yes,
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                finishAffinity()
+            }
+            .setNegativeButton(android.R.string.no) { dialog, which ->
+                Toast.makeText(
+                    applicationContext, android.R.string.no,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 }
