@@ -23,7 +23,7 @@ class SaleList(private val context: Activity, internal val sales: List<Sale>) :
         val textTotal = listViewItem.findViewById(R.id.textTotal) as TextView
 
         val sale = sales[position]
-        textCode.text = "Código: ${sale.code}"
+        textCode.text = "N° Venta: ${sale.code}"
         textDate.text = "Fecha: ${sale.date}"
         textClient.text = "Cliente: ${sale.client}"
         textDni.text = "DNI: ${sale.dni}"
