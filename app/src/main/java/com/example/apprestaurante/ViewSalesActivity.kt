@@ -67,7 +67,7 @@ class ViewSalesActivity : AppCompatActivity() {
                     val array = org.json.JSONArray(response)
 
                     if (array.length() == 0) {
-                        Toast.makeText(this, "No hay ventas registrados", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "No hay ventas registradas", Toast.LENGTH_SHORT).show()
                     }
 
                     for (i in 0 until array.length()) {
