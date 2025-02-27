@@ -5,7 +5,7 @@ object EndPoints {
 
     // EndPoints de Login
 
-    val URL_LOGIN = URL_ROOT + "restaurante/login"
+    val URL_LOGIN = URL_ROOT + "user/login"
 
     // EndPoints de Productos
 
