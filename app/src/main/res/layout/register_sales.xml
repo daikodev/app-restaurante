@@ -72,10 +72,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.888"
+        app:layout_constraintHorizontal_bias="0.884"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.957" />
+        app:layout_constraintVertical_bias="0.96" />
 
     <EditText
         android:id="@+id/txtClient"
@@ -176,6 +176,22 @@
         app:layout_constraintVertical_bias="0.851" />
 
     <TextView
+        android:id="@+id/lblIgv"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:gravity="center"
+        android:text="IGV: S/. 0.00"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.086"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.989" />
+
+    <TextView
         android:id="@+id/lblSubTotal"
         android:layout_width="150dp"
         android:layout_height="45dp"
@@ -189,7 +205,7 @@
         app:layout_constraintHorizontal_bias="0.086"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.958" />
+        app:layout_constraintVertical_bias="0.934" />
 
     <EditText
         android:id="@+id/txtDni"

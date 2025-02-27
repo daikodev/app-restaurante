@@ -5,7 +5,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
@@ -19,6 +18,8 @@ import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import org.w3c.dom.Text
+import java.util.regex.Pattern
 
 class RegisterSalesActivity : AppCompatActivity() {
     lateinit var txtCodeSale: EditText
@@ -30,6 +31,7 @@ class RegisterSalesActivity : AppCompatActivity() {
     lateinit var txtQuantity: EditText
     lateinit var chDiscount: CheckBox
     lateinit var lblSubTotal: TextView
+    lateinit var lblIgv: TextView
     lateinit var lblTotal: TextView
     lateinit var cboListProducts: Spinner
     lateinit var btnSave: Button
@@ -56,6 +58,7 @@ class RegisterSalesActivity : AppCompatActivity() {
         txtQuantity = findViewById(R.id.txtQuantity)
         chDiscount = findViewById(R.id.chDiscount)
         lblSubTotal = findViewById(R.id.lblSubTotal)
+        lblIgv = findViewById(R.id.lblIgv)
         lblTotal = findViewById(R.id.lblTotal)
 
         cboListProducts = findViewById(R.id.cboListProducts)
@@ -171,7 +174,7 @@ class RegisterSalesActivity : AppCompatActivity() {
             val quantity = txtQuantity.text.toString().trim().toInt()
             val dsct = chDiscount.isChecked
 
-            if (!validateOthers(codeSale, quantity)) return
+            if (!validateOthers(codeSale, date, quantity)) return
 
             if (selectedProductIndex == 0) {
                 Toast.makeText(
@@ -191,6 +194,7 @@ class RegisterSalesActivity : AppCompatActivity() {
             val total = subTotal + igv
 
             lblSubTotal.text = "Subtotal: S/ %.2f".format(subTotal)
+            lblIgv.text = "IGV: S/ %.2f".format(igv)
             lblTotal.text = "Total: S/ %.2f".format(total)
 
 
@@ -299,6 +303,7 @@ class RegisterSalesActivity : AppCompatActivity() {
                         val total = subTotal + igv
 
                         lblSubTotal.text = "Subtotal: S/ %.2f".format(subTotal)
+                        lblIgv.text = "IGV: S/ %.2f".format(igv)
                         lblTotal.text = "Total: S/ %.2f".format(total)
 
                         Toast.makeText(this, "Venta encontrada", Toast.LENGTH_SHORT).show()
@@ -438,12 +443,20 @@ class RegisterSalesActivity : AppCompatActivity() {
         return answer
     }
 
-    fun validateOthers(codeSale: String, quantity: Int): Boolean {
+    fun validateOthers(codeSale: String, dateSale: String, quantity: Int): Boolean {
         val codeVal = Regex("^V\\d{5}$")
         if (!codeSale.matches(codeVal)) {
             Toast.makeText(this, "El formato del código debe ser 'V00001'", Toast.LENGTH_SHORT)
                 .show()
             txtCodeSale.requestFocus()
+            return false
+        }
+
+        val dateVal = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}$");
+        if (!dateVal.matcher(dateSale).matches()) {
+            Toast.makeText(this, "El formato de la fecha debe ser 'YYYY-MM-DD'", Toast.LENGTH_SHORT)
+                .show()
+            txtDate.requestFocus()
             return false
         }
 
