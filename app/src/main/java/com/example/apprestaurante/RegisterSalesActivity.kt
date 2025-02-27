@@ -1,6 +1,7 @@
 package com.example.apprestaurante
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -77,13 +78,7 @@ class RegisterSalesActivity : AppCompatActivity() {
 
         btnSearchCodeSale.setOnClickListener {
             val code = txtCodeSale.text.toString().trim()
-
-            if (code.isNotEmpty()) {
-                searchSalesByCode(code)
-            } else {
-                Toast.makeText(this, "Por favor, ingrese un código para buscar", Toast.LENGTH_SHORT)
-                    .show()
-            }
+            searchSalesByCode(code)
         }
 
         btnViewSales.setOnClickListener {
@@ -165,138 +160,151 @@ class RegisterSalesActivity : AppCompatActivity() {
     }
 
     private fun saveSale() {
-        val codeSale = txtCodeSale.text.toString().trim()
-        val dni = txtDni.text.toString().trim()
-        val date = txtDate.text.toString().trim()
-        val client = txtClient.text.toString().trim()
+        if (validate()) {
+            val codeSale = txtCodeSale.text.toString().trim()
+            val dni = txtDni.text.toString().trim()
+            val date = txtDate.text.toString().trim()
+            val client = txtClient.text.toString().trim()
+            val selectedProductIndex = cboListProducts.selectedItemPosition
+            val selectedProductId = productsIds[selectedProductIndex]
+            var priceUnit = productsPrices[selectedProductIndex]
+            val quantity = txtQuantity.text.toString().trim().toInt()
+            val dsct = chDiscount.isChecked
 
-        val selectedProductIndex = cboListProducts.selectedItemPosition
-        val selectedProductId = productsIds[selectedProductIndex]
-        var priceUnit = productsPrices[selectedProductIndex]
+            if (!validateOthers(codeSale, quantity)) return
 
-        val quantity = txtQuantity.text.toString().trim().toInt()
-        val dsct = chDiscount.isChecked
-
-        if (chDiscount.isChecked) {
-            priceUnit *= 0.90
-        }
-
-        val subTotal = priceUnit * quantity
-        val igv = subTotal * 0.18
-        val total = subTotal + igv
-
-        lblSubTotal.text = "Subtotal: S/ %.2f".format(subTotal)
-        lblTotal.text = "Total: S/ %.2f".format(total)
-
-        val stringRequest = object : StringRequest(
-            Request.Method.POST, EndPoints.URL_SAVE_SALE,
-            Response.Listener<String> { response ->
-                try {
-                    val jsonObject = JSONObject(response)
-                    val cod = jsonObject.getString("code")
-
-                    Toast.makeText(
-                        this,
-                        "La venta $cod fue agregado exitosamente",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    new()
-
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            },
-            object : Response.ErrorListener {
-                override fun onErrorResponse(volleyError: VolleyError) {
-                    Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG)
-                        .show()
-                }
-            }) {
-            @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params.put("code", codeSale)
-                params.put("dni", dni)
-                params.put("date", date)
-                params.put("client", client)
-                params.put("productId", selectedProductId.toString())
-                params.put("quantity", quantity.toString())
-                params.put("total", total.toString())
-                params.put("discount", dsct.toString())
-                params.put("status", "true")
-                return params
+            if (selectedProductIndex == 0) {
+                Toast.makeText(
+                    this,
+                    "Por favor, seleccione un producto",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
             }
-        }
 
-        VolleySingleton.instance?.addToRequestQueue(stringRequest)
+            if (chDiscount.isChecked) {
+                priceUnit *= 0.90
+            }
+
+            val subTotal = priceUnit * quantity
+            val igv = subTotal * 0.18
+            val total = subTotal + igv
+
+            lblSubTotal.text = "Subtotal: S/ %.2f".format(subTotal)
+            lblTotal.text = "Total: S/ %.2f".format(total)
+
+
+            val stringRequest = object : StringRequest(
+                Request.Method.POST, EndPoints.URL_SAVE_SALE,
+                Response.Listener<String> { response ->
+                    try {
+                        val jsonObject = JSONObject(response)
+                        val cod = jsonObject.getString("code")
+
+                        Toast.makeText(
+                            this,
+                            "La venta $cod fue agregado exitosamente",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                },
+                object : Response.ErrorListener {
+                    override fun onErrorResponse(volleyError: VolleyError) {
+                        Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String> {
+                    val params = HashMap<String, String>()
+                    params.put("code", codeSale)
+                    params.put("dni", dni)
+                    params.put("date", date)
+                    params.put("client", client)
+                    params.put("productId", selectedProductId.toString())
+                    params.put("quantity", quantity.toString())
+                    params.put("total", total.toString())
+                    params.put("discount", dsct.toString())
+                    params.put("status", "true")
+                    return params
+                }
+            }
+
+            VolleySingleton.instance?.addToRequestQueue(stringRequest)
+        }
     }
 
     private var saleId: Int? = null // Almacenar el ID de la venta
 
     private fun searchSalesByCode(code: String) {
-        val stringRequest = StringRequest(
-            Request.Method.GET,
-            EndPoints.URL_FIND_SALE + code,
-            Response.Listener<String> { response ->
-                try {
-                    if (response.isEmpty() || response == "null") {
-                        Toast.makeText(this, "Venta no encontrada", Toast.LENGTH_SHORT).show()
-                        return@Listener
+        if (validateCode()) {
+            val stringRequest = StringRequest(
+                Request.Method.GET,
+                EndPoints.URL_FIND_SALE + code,
+                Response.Listener<String> { response ->
+                    try {
+                        if (response.isEmpty() || response == "null") {
+                            Toast.makeText(this, "Venta no encontrada", Toast.LENGTH_SHORT).show()
+                            return@Listener
+                        }
+
+                        val objectSale = JSONObject(response)
+
+                        saleId = objectSale.getInt("id")
+                        txtCodeSale.setText(objectSale.getString("code"))
+                        txtDni.setText(objectSale.getString("dni"))
+                        txtDate.setText(objectSale.getString("date"))
+                        txtClient.setText(objectSale.getString("client"))
+
+                        val product = objectSale.getJSONObject("product")
+                        val productId = product.getInt("id")
+                        val position = productsIds.indexOf(productId)
+                        if (position != -1) {
+                            cboListProducts.setSelection(position)
+                            lblPriceUnit.text = "S/ ${productsPrices[position]}"
+                        }
+
+                        txtQuantity.setText(objectSale.getString("quantity"))
+
+                        val dsct = objectSale.getBoolean("discount")
+                        chDiscount.isChecked = dsct
+
+                        // Calcular precio unitario y total
+                        var priceUnit = productsPrices.getOrElse(position) { 0.0 }
+                        val quantity = objectSale.getInt("quantity")
+
+                        if (dsct) {
+                            priceUnit *= 0.90
+                        }
+
+                        val subTotal = priceUnit * quantity
+                        val igv = subTotal * 0.18
+                        val total = subTotal + igv
+
+                        lblSubTotal.text = "Subtotal: S/ %.2f".format(subTotal)
+                        lblTotal.text = "Total: S/ %.2f".format(total)
+
+                        Toast.makeText(this, "Venta encontrada", Toast.LENGTH_SHORT).show()
+
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT)
+                            .show()
                     }
-
-                    val objectSale = JSONObject(response)
-
-                    saleId = objectSale.getInt("id")
-                    txtCodeSale.setText(objectSale.getString("code"))
-                    txtDni.setText(objectSale.getString("dni"))
-                    txtDate.setText(objectSale.getString("date"))
-                    txtClient.setText(objectSale.getString("client"))
-
-                    val product = objectSale.getJSONObject("product")
-                    val productId = product.getInt("id")
-                    val position = productsIds.indexOf(productId)
-                    if (position != -1) {
-                        cboListProducts.setSelection(position)
-                        lblPriceUnit.text = "S/ ${productsPrices[position]}"
-                    }
-
-                    txtQuantity.setText(objectSale.getString("quantity"))
-
-                    val dsct = objectSale.getBoolean("discount")
-                    chDiscount.isChecked = dsct
-
-                    // Calcular precio unitario y total
-                    var priceUnit = productsPrices.getOrElse(position) {0.0}
-                    val quantity = objectSale.getInt("quantity")
-
-                    if (dsct) {
-                        priceUnit *= 0.90
-                    }
-
-                    val subTotal = priceUnit * quantity
-                    val igv = subTotal * 0.18
-                    val total = subTotal + igv
-
-                    lblSubTotal.text = "Subtotal: S/ %.2f".format(subTotal)
-                    lblTotal.text = "Total: S/ %.2f".format(total)
-
-                    Toast.makeText(this, "Venta encontrada", Toast.LENGTH_SHORT).show()
-
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT)
+                },
+                Response.ErrorListener { volleyError ->
+                    Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG)
                         .show()
-                }
-            },
-            Response.ErrorListener { volleyError ->
-                Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG).show()
-            })
+                })
 
-        val requestQueue = Volley.newRequestQueue(this)
-        requestQueue.add(stringRequest)
+            val requestQueue = Volley.newRequestQueue(this)
+            requestQueue.add(stringRequest)
+        }
     }
 
     private fun deleteSale() {
@@ -306,35 +314,47 @@ class RegisterSalesActivity : AppCompatActivity() {
             return
         }
 
-        val code = txtCodeSale.text.toString().trim()
+        val codeSale = txtCodeSale.text.toString().trim()
 
-        val stringRequest = object : StringRequest(
-            Request.Method.PATCH, EndPoints.URL_DELETE_SALE + saleId,
-            Response.Listener<String> { response ->
-                try {
-                    Toast.makeText(
-                        this,
-                        "La venta $code fue eliminada exitosamente",
-                        Toast.LENGTH_SHORT
-                    ).show()
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("Confirmar Eliminación")
+            .setMessage("¿Está seguro de que desea eliminar el producto $codeSale?")
+            .setPositiveButton("Sí") { _, _ ->
+                val stringRequest = object : StringRequest(
+                    Request.Method.PATCH, EndPoints.URL_DELETE_SALE + saleId,
+                    Response.Listener<String> { response ->
+                        try {
+                            Toast.makeText(
+                                this,
+                                "La venta $codeSale fue eliminada exitosamente",
+                                Toast.LENGTH_SHORT
+                            ).show()
 
-                    new()
+                            new()
 
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT)
-                        .show()
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                            Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    },
+                    object : Response.ErrorListener {
+                        override fun onErrorResponse(volleyError: VolleyError) {
+                            Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG)
+                                .show()
+                        }
+                    }) {
                 }
-            },
-            object : Response.ErrorListener {
-                override fun onErrorResponse(volleyError: VolleyError) {
-                    Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG)
-                        .show()
-                }
-            }) {
-        }
 
-        VolleySingleton.instance?.addToRequestQueue(stringRequest)
+                VolleySingleton.instance?.addToRequestQueue(stringRequest)
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
     private fun new() {
@@ -350,6 +370,78 @@ class RegisterSalesActivity : AppCompatActivity() {
         lblTotal.text = "Total: S/. 0.00"
 
         txtCodeSale.requestFocus()
+    }
+
+    fun validate(): Boolean {
+        var answer = true
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("Error")
+            .setMessage("Por favor, complete todos los campos")
+
+        val dialog: AlertDialog = builder.create()
+
+        if (txtCodeSale.text.toString().trim().isEmpty()) {
+            answer = false
+            dialog.show()
+            txtCodeSale.requestFocus()
+        }
+
+        if (txtDni.text.toString().trim().isEmpty()) {
+            answer = false
+            dialog.show()
+            txtDni.requestFocus()
+        }
+
+        if (txtDate.text.toString().trim().isEmpty()) {
+            answer = false
+            dialog.show()
+            txtDate.requestFocus()
+        }
+
+        if (txtQuantity.text.toString().trim().isEmpty()) {
+            answer = false
+            dialog.show()
+            txtQuantity.requestFocus()
+        }
+
+        return answer
+    }
+
+    fun validateCode(): Boolean {
+        var answer = true
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("Error")
+            .setMessage("Por favor, ingrese un código para buscar")
+
+        val dialog: AlertDialog = builder.create()
+
+        if (txtCodeSale.text.toString().trim().isEmpty()) {
+            answer = false
+            dialog.show()
+            txtCodeSale.requestFocus()
+        }
+
+        return answer
+    }
+
+    fun validateOthers(codeSale: String, quantity: Int): Boolean {
+        val codeVal = Regex("^V\\d{5}$")
+        if (!codeSale.matches(codeVal)) {
+            Toast.makeText(this, "El formato del código debe ser 'V00001'", Toast.LENGTH_SHORT)
+                .show()
+            txtCodeSale.requestFocus()
+            return false
+        }
+
+        if (quantity <= 0) {
+            Toast.makeText(this, "Ingrese una cantidad válida", Toast.LENGTH_SHORT).show()
+            txtQuantity.requestFocus()
+            return false
+        }
+
+        return true
     }
 
     // Menú para regresar al HomeActivity
