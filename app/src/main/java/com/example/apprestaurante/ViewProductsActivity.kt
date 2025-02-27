@@ -66,7 +66,7 @@ class ViewProductsActivity : AppCompatActivity() {
                     val array = org.json.JSONArray(response)
 
                     if (array.length() == 0) {
-                        Toast.makeText(this, "No hay productos registrados", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "No hay platos registrados", Toast.LENGTH_SHORT).show()
                     }
 
                     for (i in 0 until array.length()) {
@@ -113,7 +113,7 @@ class ViewProductsActivity : AppCompatActivity() {
                         val array = org.json.JSONArray(response)
 
                         if (array.length() == 0) {
-                            Toast.makeText(this, "Producto no encontrado", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Plato no encontrado", Toast.LENGTH_SHORT).show()
                             return@Listener
                         }
 
@@ -132,7 +132,7 @@ class ViewProductsActivity : AppCompatActivity() {
                             )
 
                             productList!!.add(product)
-                            Toast.makeText(this, "Producto encontrado", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Plato encontrado", Toast.LENGTH_SHORT).show()
                         }
 
                         val adapter = ProductList(this@ViewProductsActivity, productList!!)

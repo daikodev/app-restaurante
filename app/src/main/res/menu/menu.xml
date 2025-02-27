@@ -19,7 +19,7 @@
     <item
         android:id="@+id/viewProducts"
         android:icon="@drawable/ver"
-        android:title="Ver Productos" />
+        android:title="Ver Platos" />
     <item
         android:id="@+id/viewSales"
         android:icon="@drawable/ver"
@@ -27,7 +27,7 @@
     <item
         android:id="@+id/products"
         android:icon="@drawable/productos"
-        android:title="Productos" />
+        android:title="Platos" />
     <item
         android:id="@+id/sales"
         android:icon="@drawable/ventas"

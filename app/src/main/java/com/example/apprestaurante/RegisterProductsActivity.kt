@@ -109,7 +109,7 @@ class RegisterProductsActivity : AppCompatActivity() {
 
                         Toast.makeText(
                             this,
-                            "El producto $cod fue agregado exitosamente",
+                            "El plato $cod fue agregado exitosamente",
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -168,7 +168,7 @@ class RegisterProductsActivity : AppCompatActivity() {
                         val array = org.json.JSONArray(response)
 
                         if (array.length() == 0) {
-                            Toast.makeText(this, "Producto no encontrado", Toast.LENGTH_SHORT)
+                            Toast.makeText(this, "Plato no encontrado", Toast.LENGTH_SHORT)
                                 .show()
                             return@Listener
                         }
@@ -190,7 +190,7 @@ class RegisterProductsActivity : AppCompatActivity() {
                             "Personal" -> rbPersonal.isChecked = true
                         }
 
-                        Toast.makeText(this, "Producto encontrado", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Plato encontrado", Toast.LENGTH_SHORT).show()
 
                     } catch (e: JSONException) {
                         e.printStackTrace()
@@ -210,7 +210,7 @@ class RegisterProductsActivity : AppCompatActivity() {
 
     private fun updateProducts() {
         if (productId == null) {
-            Toast.makeText(this, "Por favor, busque un producto primero", Toast.LENGTH_SHORT)
+            Toast.makeText(this, "Por favor, busque un plato primero", Toast.LENGTH_SHORT)
                 .show()
             return
         }
@@ -238,7 +238,7 @@ class RegisterProductsActivity : AppCompatActivity() {
                 try {
                     Toast.makeText(
                         this,
-                        "El producto $codeProduct fue actualizado exitosamente",
+                        "El plato $codeProduct fue actualizado exitosamente",
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -286,7 +286,7 @@ class RegisterProductsActivity : AppCompatActivity() {
 
     private fun deleteProducts() {
         if (productId == null) {
-            Toast.makeText(this, "Por favor, busque un producto primero", Toast.LENGTH_SHORT)
+            Toast.makeText(this, "Por favor, busque un plato primero", Toast.LENGTH_SHORT)
                 .show()
             return
         }
@@ -296,7 +296,7 @@ class RegisterProductsActivity : AppCompatActivity() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder
             .setTitle("Confirmar Eliminación")
-            .setMessage("¿Está seguro de que desea eliminar el producto $codeProduct?")
+            .setMessage("¿Está seguro de que desea eliminar el plato $codeProduct?")
             .setPositiveButton("Sí") { _, _ ->
                 val stringRequest = object : StringRequest(
                     Request.Method.PATCH, EndPoints.URL_DELETE_PRODUCT + productId,
@@ -304,7 +304,7 @@ class RegisterProductsActivity : AppCompatActivity() {
                         try {
                             Toast.makeText(
                                 this,
-                                "El producto $codeProduct fue eliminado exitosamente",
+                                "El plato $codeProduct fue eliminado exitosamente",
                                 Toast.LENGTH_SHORT
                             ).show()
 
