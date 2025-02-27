@@ -117,8 +117,20 @@ class RegisterProductsActivity : AppCompatActivity() {
                 },
                 object : Response.ErrorListener {
                     override fun onErrorResponse(volleyError: VolleyError) {
-                        Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG)
-                            .show()
+                        if (volleyError.networkResponse != null && volleyError.networkResponse.statusCode == 409) {
+                            Toast.makeText(
+                                applicationContext,
+                                "El código ingresado ya existe",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                applicationContext,
+                                volleyError.message,
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
+                        }
                     }
                 }) {
                 @Throws(AuthFailureError::class)
@@ -232,8 +244,20 @@ class RegisterProductsActivity : AppCompatActivity() {
             },
             object : Response.ErrorListener {
                 override fun onErrorResponse(volleyError: VolleyError) {
-                    Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG)
-                        .show()
+                    if (volleyError.networkResponse != null && volleyError.networkResponse.statusCode == 409) {
+                        Toast.makeText(
+                            applicationContext,
+                            "El código ingresado ya existe",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            volleyError.message,
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                    }
                 }
             }) {
             @Throws(AuthFailureError::class)
