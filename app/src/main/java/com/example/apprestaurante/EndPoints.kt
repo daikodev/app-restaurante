@@ -13,6 +13,8 @@ object EndPoints {
 
     val URL_FIND_PRODUCT = URL_ROOT + "products/code/"
 
+    val URL_PRODUCTS_IN_STOCK = URL_ROOT + "products/in-stock"
+
     val URL_SAVE_PRODUCT = URL_ROOT + "products/save"
 
     val URL_UPDATE_PRODUCT = URL_ROOT + "products/update/"
