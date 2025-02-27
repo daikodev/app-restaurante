@@ -44,15 +44,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loginUser() {
-        val name = txtName.text.toString().trim()
-        val password = txtPassword.text.toString().trim()
-
-        /*if (name.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Por favor, ingrese usuario y contraseña", Toast.LENGTH_SHORT).show()
-            return
-        }*/
-
         if (validate()) {
+            val name = txtName.text.toString().trim()
+            val password = txtPassword.text.toString().trim()
+
             val stringRequest = object : StringRequest(Request.Method.POST, EndPoints.URL_LOGIN,
                 Response.Listener<String> { response ->
                     try {
@@ -102,6 +97,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun validate(): Boolean {
+        var answer = true
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("Error")
+            .setMessage("Por favor, complete todos los campos")
+
+        val dialog: AlertDialog = builder.create()
+
+        if (txtName.text.toString().trim().isEmpty()) {
+            answer = false
+            dialog.show()
+            txtName.requestFocus()
+        }
+
+        if (txtPassword.text.toString().trim().isEmpty()) {
+            answer = false
+            dialog.show()
+            txtPassword.requestFocus()
+        }
+
+        return answer
+    }
+
     fun close() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder
@@ -122,29 +141,5 @@ class MainActivity : AppCompatActivity() {
             }
         val dialog: AlertDialog = builder.create()
         dialog.show()
-    }
-
-    fun validate(): Boolean {
-        var answer = true
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder
-            .setTitle("Error en Formulario")
-            .setMessage("Por favor, complete todos los campos.")
-
-        val dialog: AlertDialog = builder.create()
-
-        if (txtName.text.toString().trim().isEmpty()) {
-            answer = false
-            dialog.show()
-            txtName.requestFocus()
-        }
-
-        if (txtPassword.text.toString().trim().isEmpty()) {
-            answer = false
-            dialog.show()
-            txtPassword.requestFocus()
-        }
-
-        return answer
     }
 }
