@@ -49,7 +49,7 @@
         <activity
             android:name=".MapsActivity"
             android:exported="true"
-            android:label="@string/title_activity_maps" />
+            android:label="RÚSTICA" />
         <activity
             android:name=".ViewProductsActivity"
             android:exported="true" />
