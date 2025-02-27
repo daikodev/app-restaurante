@@ -24,6 +24,7 @@
             android:layout_weight="1"
             android:background="#EDEDED"
             android:hint="Buscar por código"
+            android:maxLength="6"
             android:padding="8dp"></EditText>
 
         <Button

@@ -1,6 +1,7 @@
 package com.example.apprestaurante
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -43,13 +44,7 @@ class ViewProductsActivity : AppCompatActivity() {
 
         btnSearch.setOnClickListener {
             val code = txtCode.text.toString().trim()
-
-            if (code.isNotEmpty()) {
-                searchProductByCode(code)
-            } else {
-                Toast.makeText(this, "Por favor, ingrese un código para buscar", Toast.LENGTH_SHORT)
-                    .show()
-            }
+            searchProductByCode(code)
         }
 
         btnClear.setOnClickListener {
@@ -69,6 +64,10 @@ class ViewProductsActivity : AppCompatActivity() {
             Response.Listener<String> { response ->
                 try {
                     val array = org.json.JSONArray(response)
+
+                    if (array.length() == 0) {
+                        Toast.makeText(this, "No hay productos registrados", Toast.LENGTH_SHORT).show()
+                    }
 
                     for (i in 0 until array.length()) {
                         val objectProduct = array.getJSONObject(i)
@@ -105,51 +104,71 @@ class ViewProductsActivity : AppCompatActivity() {
     }
 
     private fun searchProductByCode(code: String) {
-        val stringRequest = StringRequest(
-            Request.Method.GET,
-            EndPoints.URL_FIND_PRODUCT + code,
-            Response.Listener<String> { response ->
-                try {
-                    val array = org.json.JSONArray(response)
+        if (validate()) {
+            val stringRequest = StringRequest(
+                Request.Method.GET,
+                EndPoints.URL_FIND_PRODUCT + code,
+                Response.Listener<String> { response ->
+                    try {
+                        val array = org.json.JSONArray(response)
 
-                    if (array.length() == 0) {
-                        Toast.makeText(this, "Producto no encontrado", Toast.LENGTH_SHORT).show()
-                        return@Listener
+                        if (array.length() == 0) {
+                            Toast.makeText(this, "Producto no encontrado", Toast.LENGTH_SHORT).show()
+                            return@Listener
+                        }
+
+                        productList!!.clear()
+
+                        for (i in 0 until array.length()) {
+                            val objectProduct = array.getJSONObject(i)
+                            val product = Product(
+                                objectProduct.getInt("id"),
+                                objectProduct.getString("code"),
+                                objectProduct.getString("description"),
+                                objectProduct.getString("unitOfMeasure"),
+                                objectProduct.getDouble("price"),
+                                objectProduct.getInt("stock"),
+                                objectProduct.getBoolean("status"),
+                            )
+
+                            productList!!.add(product)
+                            Toast.makeText(this, "Producto encontrado", Toast.LENGTH_SHORT).show()
+                        }
+
+                        val adapter = ProductList(this@ViewProductsActivity, productList!!)
+                        listView!!.adapter = adapter
+
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT)
+                            .show()
                     }
+                },
+                Response.ErrorListener { volleyError ->
+                    Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG).show()
+                })
 
-                    productList!!.clear() // Limpiar la lista de productos
+            val requestQueue = Volley.newRequestQueue(this)
+            requestQueue.add(stringRequest)
+        }
+    }
 
-                    for (i in 0 until array.length()) {
-                        val objectProduct = array.getJSONObject(i)
-                        val product = Product(
-                            objectProduct.getInt("id"),
-                            objectProduct.getString("code"),
-                            objectProduct.getString("description"),
-                            objectProduct.getString("unitOfMeasure"),
-                            objectProduct.getDouble("price"),
-                            objectProduct.getInt("stock"),
-                            objectProduct.getBoolean("status"),
-                        )
+    fun validate(): Boolean {
+        var answer = true
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("Error")
+            .setMessage("Por favor, ingrese un código para buscar")
 
-                        productList!!.add(product)
-                        Toast.makeText(this, "Producto encontrado", Toast.LENGTH_SHORT).show()
-                    }
+        val dialog: AlertDialog = builder.create()
 
-                    val adapter = ProductList(this@ViewProductsActivity, productList!!)
-                    listView!!.adapter = adapter
+        if (txtCode.text.toString().trim().isEmpty()) {
+            answer = false
+            dialog.show()
+            txtCode.requestFocus()
+        }
 
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            },
-            Response.ErrorListener { volleyError ->
-                Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG).show()
-            })
-
-        val requestQueue = Volley.newRequestQueue(this)
-        requestQueue.add(stringRequest)
+        return answer
     }
 
     // Menú para regresar al HomeActivity
