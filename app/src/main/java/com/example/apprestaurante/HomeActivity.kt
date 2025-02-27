@@ -44,7 +44,7 @@ class HomeActivity : AppCompatActivity() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder
             .setTitle("¿Desea salir de la aplicación?")
-            .setPositiveButton(android.R.string.yes) { dialog, which ->
+            .setPositiveButton("Sí") { dialog, which ->
                 Toast.makeText(
                     applicationContext, android.R.string.yes,
                     Toast.LENGTH_SHORT
@@ -52,7 +52,7 @@ class HomeActivity : AppCompatActivity() {
 
                 finishAffinity()
             }
-            .setNegativeButton(android.R.string.no) { dialog, which ->
+            .setNegativeButton("No") { dialog, which ->
                 Toast.makeText(
                     applicationContext, android.R.string.no,
                     Toast.LENGTH_SHORT

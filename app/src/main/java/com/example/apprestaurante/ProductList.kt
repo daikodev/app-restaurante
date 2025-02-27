@@ -20,9 +20,9 @@ class ProductList(private val context: Activity, internal val products: List<Pro
         val textStock = listViewItem.findViewById(R.id.textStock) as TextView
 
         val product = products[position]
-        textDescription.text = "Plato: ${product.description}"
         textCode.text = "Código: ${product.code}"
-        textUnit.text = "Medida: ${product.unitOfMeasure}"
+        textDescription.text = "Nombre: ${product.description}"
+        textUnit.text = "Tamaño: ${product.unitOfMeasure}"
         textPrice.text = "Precio: ${product.price}"
         textStock.text = "Stock: ${product.stock}"
 
