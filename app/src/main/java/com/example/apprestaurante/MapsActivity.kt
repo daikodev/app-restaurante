@@ -50,7 +50,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID)
         val restaurante = LatLng(-12.154311878398468, -76.98281133382216)
         mMap.addMarker(MarkerOptions().position(restaurante).title("Rústica"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurante, 20f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(restaurante, 18f))
         mMap.uiSettings.isZoomControlsEnabled = true
     }
 
