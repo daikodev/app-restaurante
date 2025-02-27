@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/textCode"
@@ -11,13 +11,6 @@
         android:layout_height="wrap_content"
         android:text="P0001"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-    <TextView
-        android:id="@+id/textDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Lomo Saltado"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
     <TextView
         android:id="@+id/textUnit"

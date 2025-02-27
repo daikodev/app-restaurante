@@ -13,15 +13,13 @@ class ProductList(private val context: Activity, internal val products: List<Pro
         val inflater = context.layoutInflater
         val listViewItem = inflater.inflate(R.layout.layout_list_products, null, true)
 
-        val textDescription = listViewItem.findViewById(R.id.textDescription) as TextView
         val textCode = listViewItem.findViewById(R.id.textCode) as TextView
         val textUnit = listViewItem.findViewById(R.id.textUnit) as TextView
         val textPrice = listViewItem.findViewById(R.id.textPrice) as TextView
         val textStock = listViewItem.findViewById(R.id.textStock) as TextView
 
         val product = products[position]
-        textCode.text = "Código: ${product.code}"
-        textDescription.text = "Nombre: ${product.description}"
+        textCode.text = "${product.code}: ${product.description}"
         textUnit.text = "Tamaño: ${product.unitOfMeasure}"
         textPrice.text = "Precio: ${product.price}"
         textStock.text = "Stock: ${product.stock}"
