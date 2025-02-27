@@ -1,6 +1,7 @@
 package com.example.apprestaurante
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -43,13 +44,8 @@ class ViewSalesActivity : AppCompatActivity() {
 
         btnSearch.setOnClickListener {
             val code = txtCode.text.toString().trim()
+            searchSaleByCode(code)
 
-            if (code.isNotEmpty()) {
-                searchSaleByCode(code)
-            } else {
-                Toast.makeText(this, "Por favor, ingrese un código para buscar", Toast.LENGTH_SHORT)
-                    .show()
-            }
         }
 
         btnClear.setOnClickListener {
@@ -69,6 +65,10 @@ class ViewSalesActivity : AppCompatActivity() {
             Response.Listener<String> { response ->
                 try {
                     val array = org.json.JSONArray(response)
+
+                    if (array.length() == 0) {
+                        Toast.makeText(this, "No hay ventas registrados", Toast.LENGTH_SHORT).show()
+                    }
 
                     for (i in 0 until array.length()) {
                         val objectSale = array.getJSONObject(i)
@@ -113,55 +113,76 @@ class ViewSalesActivity : AppCompatActivity() {
     }
 
     private fun searchSaleByCode(code: String) {
-        val stringRequest = StringRequest(
-            Request.Method.GET,
-            EndPoints.URL_FIND_SALE + code,
-            Response.Listener<String> { response ->
-                try {
-                    if (response.isEmpty() || response == "null") {
-                        Toast.makeText(this, "Venta no encontrada", Toast.LENGTH_SHORT).show()
-                        return@Listener
+        if (validate()) {
+            val stringRequest = StringRequest(
+                Request.Method.GET,
+                EndPoints.URL_FIND_SALE + code,
+                Response.Listener<String> { response ->
+                    try {
+                        if (response.isEmpty() || response == "null") {
+                            Toast.makeText(this, "Venta no encontrada", Toast.LENGTH_SHORT).show()
+                            return@Listener
+                        }
+
+                        val objectSale = JSONObject(response)
+
+                        saleList!!.clear()
+
+                        // Sacar description de product
+                        val objectProduct = objectSale.getJSONObject("product")
+                        val productDescription = objectProduct.getString("description")
+
+                        val sale = Sale(
+                            objectSale.getInt("id"),
+                            objectSale.getString("code"),
+                            objectSale.getString("dni"),
+                            objectSale.getString("date"),
+                            objectSale.getString("client"),
+                            productDescription,
+                            objectSale.getInt("quantity"),
+                            objectSale.getDouble("total"),
+                            objectSale.getBoolean("discount"),
+                            objectSale.getBoolean("status")
+                        )
+
+                        saleList!!.add(sale)
+                        Toast.makeText(this, "Venta encontrada", Toast.LENGTH_SHORT).show()
+
+                        val adapter = SaleList(this@ViewSalesActivity, saleList!!)
+                        listView!!.adapter = adapter
+
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT)
+                            .show()
                     }
-
-                    val objectSale = JSONObject(response)
-
-                    saleList!!.clear() // Limpiar la lista de ventas
-
-                    // Sacar description de product
-                    val objectProduct = objectSale.getJSONObject("product")
-                    val productDescription = objectProduct.getString("description")
-
-                    val sale = Sale(
-                        objectSale.getInt("id"),
-                        objectSale.getString("code"),
-                        objectSale.getString("dni"),
-                        objectSale.getString("date"),
-                        objectSale.getString("client"),
-                        productDescription,
-                        objectSale.getInt("quantity"),
-                        objectSale.getDouble("total"),
-                        objectSale.getBoolean("discount"),
-                        objectSale.getBoolean("status")
-                    )
-
-                    saleList!!.add(sale)
-                    Toast.makeText(this, "Venta encontrada", Toast.LENGTH_SHORT).show()
-
-                    val adapter = SaleList(this@ViewSalesActivity, saleList!!)
-                    listView!!.adapter = adapter
-
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT)
+                },
+                Response.ErrorListener { volleyError ->
+                    Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG)
                         .show()
-                }
-            },
-            Response.ErrorListener { volleyError ->
-                Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG).show()
-            })
+                })
 
-        val requestQueue = Volley.newRequestQueue(this)
-        requestQueue.add(stringRequest)
+            val requestQueue = Volley.newRequestQueue(this)
+            requestQueue.add(stringRequest)
+        }
+    }
+
+    fun validate(): Boolean {
+        var answer = true
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder
+            .setTitle("Error")
+            .setMessage("Por favor, ingrese un código para buscar")
+
+        val dialog: AlertDialog = builder.create()
+
+        if (txtCode.text.toString().trim().isEmpty()) {
+            answer = false
+            dialog.show()
+            txtCode.requestFocus()
+        }
+
+        return answer
     }
 
     // Menú para regresar al HomeActivity
