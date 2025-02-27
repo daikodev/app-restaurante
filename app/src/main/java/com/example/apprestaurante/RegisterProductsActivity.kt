@@ -31,6 +31,7 @@ class RegisterProductsActivity : AppCompatActivity() {
     lateinit var btnSearchCode: Button
     lateinit var btnUpdate: Button
     lateinit var btnDelete: Button
+    lateinit var btnNew2: Button
     lateinit var btnViewProducts: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +50,7 @@ class RegisterProductsActivity : AppCompatActivity() {
         btnSearchCode = findViewById(R.id.btnSearchCode)
         btnUpdate = findViewById(R.id.btnUpdate)
         btnDelete = findViewById(R.id.btnDelete)
+        btnNew2 = findViewById(R.id.btnNew2)
         btnViewProducts = findViewById(R.id.btnViewProducts)
 
         btnAdd.setOnClickListener {
@@ -66,6 +68,10 @@ class RegisterProductsActivity : AppCompatActivity() {
 
         btnDelete.setOnClickListener {
             deleteProducts()
+        }
+
+        btnNew2.setOnClickListener {
+            new()
         }
 
         btnViewProducts.setOnClickListener {
@@ -175,6 +181,8 @@ class RegisterProductsActivity : AppCompatActivity() {
                         txtDescription.setText(objectProduct.getString("description"))
                         txtPriceUnit.setText(objectProduct.getDouble("price").toString())
                         txtStock.setText(objectProduct.getInt("stock").toString())
+
+                        txtCodeProduct.isEnabled = false
 
                         val unitOfMeasure = objectProduct.getString("unitOfMeasure")
                         when (unitOfMeasure) {
@@ -337,6 +345,7 @@ class RegisterProductsActivity : AppCompatActivity() {
 
     private fun new() {
         txtCodeProduct.setText("")
+        txtCodeProduct.isEnabled = true
         txtDescription.setText("")
         rbUnitOfMeasure.clearCheck()
         txtPriceUnit.setText("")

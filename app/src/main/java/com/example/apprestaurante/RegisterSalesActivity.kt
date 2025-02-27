@@ -287,6 +287,8 @@ class RegisterSalesActivity : AppCompatActivity() {
 
                         txtQuantity.setText(objectSale.getString("quantity"))
 
+                        txtCodeSale.isEnabled = false
+
                         val dsct = objectSale.getBoolean("discount")
                         chDiscount.isChecked = dsct
 
@@ -376,6 +378,7 @@ class RegisterSalesActivity : AppCompatActivity() {
 
     private fun new() {
         txtCodeSale.setText("")
+        txtCodeSale.isEnabled = true
         txtDni.setText("")
         txtDate.setText("")
         txtClient.setText("")
