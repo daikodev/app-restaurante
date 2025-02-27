@@ -17,28 +17,45 @@
             app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-                android:id="@+id/txtCode"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:background="#EDEDED"
-                android:hint="Buscar por código"
-                android:maxLength="6"
-                android:padding="8dp"></EditText>
+            android:id="@+id/txtCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:background="#EDEDED"
+            android:fontFamily="@font/inter"
+            android:hint="Buscar por código"
+            android:maxLength="6"
+            android:padding="8dp"></EditText>
 
         <Button
-                android:id="@+id/btnSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Buscar"></Button>
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:text="Buscar"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:backgroundTint="#03A9F4"
+            app:icon="@drawable/search"
+            app:iconPadding="5dp"></Button>
 
         <Button
-                android:id="@+id/btnClear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:text="Limpiar"></Button>
+            android:id="@+id/btnClear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:fontFamily="@font/inter"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:text="Limpiar"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:backgroundTint="#BFBBBB"
+            app:icon="@drawable/clean"
+            app:iconPadding="5dp"></Button>
     </LinearLayout>
 
     <ListView
