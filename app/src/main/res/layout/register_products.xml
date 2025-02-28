@@ -170,7 +170,7 @@
         android:id="@+id/btnViewProducts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ver Productos"
+        android:text="Ver Platos"
         app:backgroundTint="#673AB7"
         app:icon="@drawable/go"
         app:layout_constraintBottom_toBottomOf="parent"
