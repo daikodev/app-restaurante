@@ -344,7 +344,7 @@ class RegisterSalesActivity : AppCompatActivity() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder
             .setTitle("Confirmar Eliminación")
-            .setMessage("¿Está seguro de que desea eliminar el producto $codeSale?")
+            .setMessage("¿Está seguro de que desea eliminar la venta $codeSale?")
             .setPositiveButton("Sí") { _, _ ->
                 val stringRequest = object : StringRequest(
                     Request.Method.PATCH, EndPoints.URL_DELETE_SALE + saleId,
@@ -394,6 +394,7 @@ class RegisterSalesActivity : AppCompatActivity() {
         chDiscount.isChecked = false
         lblPriceUnit.text = "S/ 0.0"
         lblSubTotal.text = "Subtotal: S/. 0.00"
+        lblIgv.text = "IGV: S/. 0.00"
         lblTotal.text = "Total: S/. 0.00"
 
         txtCodeSale.requestFocus()
