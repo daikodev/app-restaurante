@@ -81,6 +81,7 @@ class RegisterProductsActivity : AppCompatActivity() {
         }
     }
 
+    // Registrar productos
     private fun saveProducts() {
         if (validate()) {
             val codeProduct = txtCodeProduct.text.toString().trim()
@@ -156,8 +157,10 @@ class RegisterProductsActivity : AppCompatActivity() {
         }
     }
 
-    private var productId: Int? = null // Almacenar el ID del producto
+    // Almacenar el ID del producto
+    private var productId: Int? = null
 
+    // Buscar producto por código
     private fun searchProductByCode(code: String) {
         if (validateCode()) {
             val stringRequest = StringRequest(
@@ -208,6 +211,7 @@ class RegisterProductsActivity : AppCompatActivity() {
         }
     }
 
+    // Actualizar producto
     private fun updateProducts() {
         if (productId == null) {
             Toast.makeText(this, "Por favor, busque un plato primero", Toast.LENGTH_SHORT)
@@ -284,6 +288,7 @@ class RegisterProductsActivity : AppCompatActivity() {
         VolleySingleton.instance?.addToRequestQueue(stringRequest)
     }
 
+    // Eliminar producto
     private fun deleteProducts() {
         if (productId == null) {
             Toast.makeText(this, "Por favor, busque un plato primero", Toast.LENGTH_SHORT)
@@ -343,6 +348,7 @@ class RegisterProductsActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    // Limpiar los campos
     private fun new() {
         txtCodeProduct.setText("")
         txtCodeProduct.isEnabled = true
@@ -354,6 +360,7 @@ class RegisterProductsActivity : AppCompatActivity() {
         txtCodeProduct.requestFocus()
     }
 
+    // Validación para campos vacíos
     fun validate(): Boolean {
         var answer = true
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
@@ -390,6 +397,7 @@ class RegisterProductsActivity : AppCompatActivity() {
         return answer
     }
 
+    // Validación para campo código vacío
     fun validateCode(): Boolean {
         var answer = true
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
@@ -408,6 +416,7 @@ class RegisterProductsActivity : AppCompatActivity() {
         return answer
     }
 
+    // Validación para formatos de campos
     fun validateOthers(codeProduct: String, priceUnit: String, stock: String): Boolean {
         val codeVal = Regex("^P\\d{5}$")
         if (!codeProduct.matches(codeVal)) {

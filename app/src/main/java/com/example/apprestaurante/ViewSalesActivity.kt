@@ -56,6 +56,7 @@ class ViewSalesActivity : AppCompatActivity() {
         }
     }
 
+    // Cargar ventas
     private fun loadSales() {
         saleList!!.clear()
 
@@ -112,6 +113,7 @@ class ViewSalesActivity : AppCompatActivity() {
         requestQueue.add(stringRequest)
     }
 
+    // Buscar venta por código
     private fun searchSaleByCode(code: String) {
         if (validate()) {
             val stringRequest = StringRequest(
@@ -167,6 +169,7 @@ class ViewSalesActivity : AppCompatActivity() {
         }
     }
 
+    // Validación para campos vacíos
     fun validate(): Boolean {
         var answer = true
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)

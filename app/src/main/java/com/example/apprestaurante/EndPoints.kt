@@ -4,11 +4,9 @@ object EndPoints {
     private val URL_ROOT = "http://192.168.10.100:8080/"
 
     // EndPoints de Login
-
     val URL_LOGIN = URL_ROOT + "user/login"
 
     // EndPoints de Productos
-
     val URL_LIST_PRODUCTS = URL_ROOT + "products/all"
 
     val URL_FIND_PRODUCT = URL_ROOT + "products/code/"
@@ -22,7 +20,6 @@ object EndPoints {
     val URL_DELETE_PRODUCT = URL_ROOT + "products/delete/"
 
     // EndPoints de Ventas
-
     val URL_LIST_SALES = URL_ROOT + "sales/all"
 
     val URL_FIND_SALE = URL_ROOT + "sales/"

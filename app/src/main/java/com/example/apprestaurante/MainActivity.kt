@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Logear usuario
     private fun loginUser() {
         if (validate()) {
             val name = txtName.text.toString().trim()
@@ -52,7 +53,6 @@ class MainActivity : AppCompatActivity() {
                 Response.Listener<String> { response ->
                     try {
                         val jsonObject = JSONObject(response)
-
                         val username = jsonObject.getString("name")
                         Toast.makeText(this, "Bienvenido, $username", Toast.LENGTH_SHORT).show()
 
@@ -97,6 +97,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Validación para campos vacíos
     fun validate(): Boolean {
         var answer = true
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
@@ -121,6 +122,7 @@ class MainActivity : AppCompatActivity() {
         return answer
     }
 
+    // Cerrar la aplicación
     fun close() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder

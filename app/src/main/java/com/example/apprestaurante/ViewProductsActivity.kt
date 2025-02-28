@@ -55,6 +55,7 @@ class ViewProductsActivity : AppCompatActivity() {
         }
     }
 
+    // Cargar productos
     private fun loadProducts() {
         productList!!.clear()
 
@@ -103,6 +104,7 @@ class ViewProductsActivity : AppCompatActivity() {
         requestQueue.add(stringRequest)
     }
 
+    // Buscar producto por código
     private fun searchProductByCode(code: String) {
         if (validate()) {
             val stringRequest = StringRequest(
@@ -119,21 +121,19 @@ class ViewProductsActivity : AppCompatActivity() {
 
                         productList!!.clear()
 
-                        for (i in 0 until array.length()) {
-                            val objectProduct = array.getJSONObject(i)
-                            val product = Product(
-                                objectProduct.getInt("id"),
-                                objectProduct.getString("code"),
-                                objectProduct.getString("description"),
-                                objectProduct.getString("unitOfMeasure"),
-                                objectProduct.getDouble("price"),
-                                objectProduct.getInt("stock"),
-                                objectProduct.getBoolean("status"),
-                            )
+                        val objectProduct = array.getJSONObject(0)
+                        val product = Product(
+                            objectProduct.getInt("id"),
+                            objectProduct.getString("code"),
+                            objectProduct.getString("description"),
+                            objectProduct.getString("unitOfMeasure"),
+                            objectProduct.getDouble("price"),
+                            objectProduct.getInt("stock"),
+                            objectProduct.getBoolean("status"),
+                        )
 
-                            productList!!.add(product)
-                            Toast.makeText(this, "Plato encontrado", Toast.LENGTH_SHORT).show()
-                        }
+                        productList!!.add(product)
+                        Toast.makeText(this, "Plato encontrado", Toast.LENGTH_SHORT).show()
 
                         val adapter = ProductList(this@ViewProductsActivity, productList!!)
                         listView!!.adapter = adapter
@@ -145,7 +145,8 @@ class ViewProductsActivity : AppCompatActivity() {
                     }
                 },
                 Response.ErrorListener { volleyError ->
-                    Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, volleyError.message, Toast.LENGTH_LONG)
+                        .show()
                 })
 
             val requestQueue = Volley.newRequestQueue(this)
@@ -153,6 +154,7 @@ class ViewProductsActivity : AppCompatActivity() {
         }
     }
 
+    // Validación para campos vacíos
     fun validate(): Boolean {
         var answer = true
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
