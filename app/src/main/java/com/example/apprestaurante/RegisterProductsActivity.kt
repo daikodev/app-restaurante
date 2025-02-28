@@ -219,73 +219,75 @@ class RegisterProductsActivity : AppCompatActivity() {
             return
         }
 
-        val codeProduct = txtCodeProduct.text.toString().trim()
-        val description = txtDescription.text.toString().trim()
-        val priceUnit = txtPriceUnit.text.toString().trim()
-        val stock = txtStock.text.toString().trim()
-        val unitOfMeasure = when {
-            rbFamily.isChecked -> "Familiar"
-            rbPersonal.isChecked -> "Personal"
-            else -> ""
-        }
+        if (validate()) {
+            val codeProduct = txtCodeProduct.text.toString().trim()
+            val description = txtDescription.text.toString().trim()
+            val priceUnit = txtPriceUnit.text.toString().trim()
+            val stock = txtStock.text.toString().trim()
+            val unitOfMeasure = when {
+                rbFamily.isChecked -> "Familiar"
+                rbPersonal.isChecked -> "Personal"
+                else -> ""
+            }
 
-        if (!validateOthers(codeProduct, priceUnit, stock)) return
+            if (!validateOthers(codeProduct, priceUnit, stock)) return
 
-        if (unitOfMeasure.isEmpty()) {
-            Toast.makeText(this, "Seleccione una unidad de medida", Toast.LENGTH_SHORT).show()
-            return
-        }
+            if (unitOfMeasure.isEmpty()) {
+                Toast.makeText(this, "Seleccione una unidad de medida", Toast.LENGTH_SHORT).show()
+                return
+            }
 
-        val stringRequest = object : StringRequest(
-            Request.Method.PATCH, EndPoints.URL_UPDATE_PRODUCT + productId,
-            Response.Listener<String> { response ->
-                try {
-                    Toast.makeText(
-                        this,
-                        "El plato $codeProduct fue actualizado exitosamente",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    new()
-
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                    Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            },
-            object : Response.ErrorListener {
-                override fun onErrorResponse(volleyError: VolleyError) {
-                    if (volleyError.networkResponse != null && volleyError.networkResponse.statusCode == 409) {
+            val stringRequest = object : StringRequest(
+                Request.Method.PATCH, EndPoints.URL_UPDATE_PRODUCT + productId,
+                Response.Listener<String> { response ->
+                    try {
                         Toast.makeText(
-                            applicationContext,
-                            "El código ingresado ya existe",
+                            this,
+                            "El plato $codeProduct fue actualizado exitosamente",
                             Toast.LENGTH_SHORT
                         ).show()
-                    } else {
-                        Toast.makeText(
-                            applicationContext,
-                            volleyError.message,
-                            Toast.LENGTH_LONG
-                        )
+
+                        new()
+
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                        Toast.makeText(this, "Error al procesar la respuesta", Toast.LENGTH_SHORT)
                             .show()
                     }
+                },
+                object : Response.ErrorListener {
+                    override fun onErrorResponse(volleyError: VolleyError) {
+                        if (volleyError.networkResponse != null && volleyError.networkResponse.statusCode == 409) {
+                            Toast.makeText(
+                                applicationContext,
+                                "El código ingresado ya existe",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                applicationContext,
+                                volleyError.message,
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
+                        }
+                    }
+                }) {
+                @Throws(AuthFailureError::class)
+                override fun getParams(): Map<String, String> {
+                    val params = HashMap<String, String>()
+                    params.put("code", codeProduct)
+                    params.put("description", description)
+                    params.put("unitOfMeasure", unitOfMeasure)
+                    params.put("price", priceUnit)
+                    params.put("stock", stock)
+                    params.put("status", "true")
+                    return params
                 }
-            }) {
-            @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params.put("code", codeProduct)
-                params.put("description", description)
-                params.put("unitOfMeasure", unitOfMeasure)
-                params.put("price", priceUnit)
-                params.put("stock", stock)
-                params.put("status", "true")
-                return params
             }
-        }
 
-        VolleySingleton.instance?.addToRequestQueue(stringRequest)
+            VolleySingleton.instance?.addToRequestQueue(stringRequest)
+        }
     }
 
     // Eliminar producto
